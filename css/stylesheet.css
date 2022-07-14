@@ -59,12 +59,16 @@ table {
   --header-height: 5rem;
   --content-height: calc(100vh - 5rem);
 
+  --logo-font: 'Ibarra Real Nova', 'sans-serif', Verdana;
+  --book-title-font: 'Cormorant SC', 'sans-serif', Verdana;
+
   --header-bg: #D5BDAF;
   --logo-color: #edede9;
   --header-btn: #fbfaf8;
   --content-bg: #efede6;
   --book-card-bg: #ccd2bb;
   --read-btn: #f4f2e1;
+  --book-form-bg: #fdfcf7;
 }
 
 .header {
@@ -84,11 +88,13 @@ table {
   display: flex;
   justify-content: space-between;
   align-items: center;
+
+  /* position: relative; */
 }
 
 .header-content .logo {
   font-size: 2.2rem;
-  font-family: 'Ibarra Real Nova', 'sans-serif', Verdana;
+  font-family: var(--logo-font);
   font-weight: 700;
 
   color: var(--logo-color);
@@ -124,7 +130,7 @@ table {
   gap: 20px;
   justify-content: center;
 
-  position: relative;
+  /* position: relative; */
 }
 
 .content .book-card {
@@ -153,7 +159,7 @@ table {
 }
 
 .book-card .title-block {
-  font-family: 'Cormorant SC', 'sans-serif', Verdana;
+  font-family: var(--book-title-font);
   font-weight: 700;
   font-size: 1.8rem;
 }
@@ -197,9 +203,9 @@ table {
   filter: brightness(95%);
 }
 
-.content .add-book {
-  position: absolute;
-  top: 10px;
+.content .add-book-btn {
+  position: fixed;
+  top: calc(var(--header-height) + 16px);
   justify-self: center;
 
   background-color: var(--content-bg);
@@ -212,7 +218,92 @@ table {
   font-size: 1.5rem;
 }
 
-.content .add-book:hover {
+.content .add-book-btn:hover {
   border: 1px black dotted;
   filter: brightness(95%);
+  cursor: pointer;
+}
+
+/* Book details prompt */
+.add-book-container {
+  position: absolute;
+  top: 0;
+  
+  width: 100%;
+  height: 100%;
+  display: none;
+  /* display: flex; */
+  justify-content: center;
+
+  background-color: rgba(237, 237, 233, 0.8);
+}
+
+.show {
+  display: flex;
+}
+
+.add-book-form {
+  position: relative;
+  top: 20vh;
+  width: 400px;
+  height: 400px;
+
+  border-radius: 10px;
+  padding: 5px 16px 24px;
+  /* padding-top: 5px; */
+
+  background-color: var(--book-form-bg);
+
+  display: grid;
+  grid-template-rows: 20px 1fr 1fr 1fr 1fr 1fr;
+}
+
+.add-book-form .close-btn {
+  justify-self: end;
+  align-self: center;
+  width: 20px;
+  height: 20px;
+  margin-right: -11px;
+  
+  background-color: var(--book-form-bg);
+  color: #e63946;
+
+  border: none;
+  border-radius: 5px;
+
+  font-size: 1.2rem;
+
+}
+
+.add-book-form .close-btn:hover {
+  transform: scale(1.2);
+  /* cursor: pointer; */
+}
+
+.add-book-form .book-form-header {
+  justify-self: center;
+
+  font-size: 1.8em;
+  font-weight: 700;
+  font-family: var(--logo-font);
+}
+
+.add-book-form .form-input {
+  display: grid; 
+  grid-template-columns: 20% 60%;
+  gap: 10px;
+  align-items: center;
+  height: 30px;
+}
+
+.add-book-form label {
+  font-family: var(--book-title-font);
+  font-weight: 700;
+  font-size: 1.2rem;
+}
+
+.add-book-form input[type=text] {
+  border: 1px solid black;
+  border-radius: 5px;
+  padding: 5px 10px;
 }
