@@ -3,13 +3,13 @@ let myLibrary = [];
 let numOfBooks = 0;
 
 // Book Object Definition
-function Book(title, author, pages) {
+function Book(title, author, pages, read=false) {
   this.title = title;
   this.author = author;
   this.pages = pages;
   
   this.id = numOfBooks++;
-  this.read = false;
+  this.read = read;
 }
 
 // Init Function - Add sample books
@@ -18,12 +18,14 @@ function initLibrary() {
   addBookToLibrary(new Book('Lord of the Flies', 'William Golding', 224));
   addBookToLibrary(new Book('The Metamorphosis', 'Franz Kafka', 74));
   
-  displayBooks();
+  // displayBooks();
 }
 
 // Library Helper Functions
 function addBookToLibrary(book) {
   myLibrary.push(book);
+
+  displayBookInGrid(book);
 }
 
 function displayBooks() {
@@ -62,7 +64,7 @@ function createEmptyBookCont() {
   pages.classList.add('pages');
   bookId.classList.add('book-id');
   bookId.setAttribute('hidden', '');
-  readBtn.classList.add('read');
+  readBtn.classList.add('read-btn');
 
   titleBlock.appendChild(title);
   authorBlock.appendChild(author);
@@ -109,8 +111,9 @@ const closeBookForm = document.querySelector('.add-book-form .close-btn');
 const bookFormSubmitBtn = document.querySelector('.form-submit');
 const titleInput = document.querySelector('#title');
 const authorInput = document.querySelector('#author');
+const pagesInput = document.querySelector('#pages');
+const readFlag = document.querySelector('#read');
 const formError = document.querySelector('.form-error');
-
 
 /** Event listeners */
 
@@ -120,13 +123,9 @@ addBtn.addEventListener('click', function() {
 });
 
 // Close Book Form
-closeBookForm.addEventListener('click', function() {
-  bookFormCont.classList.remove('show');
-});
+closeBookForm.addEventListener('click', closeForm);
 
-bookFormCont.addEventListener('click', function() {
-  bookFormCont.classList.remove('show');
-});
+bookFormCont.addEventListener('click', closeForm);
 
 bookForm.addEventListener('click', function(e) {
   e.stopPropagation();
@@ -136,11 +135,18 @@ bookForm.addEventListener('keydown', function(e) {
   if (e.key === 'Enter') {
     submitForm();
   }
+  if (e.key === 'Escape') {
+    closeForm();
+  }
 })
 
 bookFormSubmitBtn.addEventListener('click', submitForm);
 
 window.onload(initLibrary());
+
+function closeForm() {
+  bookFormCont.classList.remove('show');
+}
 
 function submitForm() {
   
@@ -153,11 +159,23 @@ function submitForm() {
       formError.innerText = '* This book is already in your library!'
       
     } else {
+      const pages = pagesInput.value;
+      const hasRead = readFlag.checked;
       
-      console.log(`${title} is a valid entry`);
+      const newBook = new Book(title, author, pages, hasRead);
+      addBookToLibrary(newBook);
+      
+      closeForm();
+      clearForm();
     }
-
   }
+}
+
+function clearForm() {
+  titleInput.value = '';
+  authorInput.value = '';
+  pagesInput.value = '';
+  readFlag.checked= true;
 }
 
 function bookExists(title, author) {

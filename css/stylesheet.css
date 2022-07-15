@@ -67,7 +67,8 @@ table {
   --header-btn: #fbfaf8;
   --content-bg: #efede6;
   --book-card-bg: #ccd2bb;
-  --read-btn: #f4f2e1;
+  --has-read-btn: #f4f2e1;
+  --not-read-btn: #e63946;
   --book-form-bg: #fdfcf7;
 }
 
@@ -189,20 +190,27 @@ body {
   font-size: 1.1rem;
 }
 
-.book-card .read {
+.book-card .read-btn {
   width: 50%;
   height: 60%;
   padding: 5px 10px;
 
   font-family: 'Open sans', 'sans-serif', Verdana;
-
-  background-color: var(--read-btn);
-
+  background-color: var(--has-read-btn);
+  
   border: none;
   border-radius: 5px;
 }
 
-.book-card .read:hover {
+.not-read {
+  background-color: var(--has-read-btn);
+}
+
+.has-read {
+  background-color: var(--not-read-btn);
+}
+
+.book-card .read-btn:hover {
   cursor: pointer;
   
   filter: brightness(95%);
@@ -332,7 +340,8 @@ body {
   user-select: none;
 }
 
-.add-book-form input[type=text] {
+.add-book-form input[type=text],
+.add-book-form input[type=number] {
   border: 1px solid black;
   border-radius: 5px;
   padding: 5px 10px;
@@ -342,11 +351,11 @@ body {
   filter: brightness(95%);
 }
 
-.add-book-form .has-read {
+.add-book-form .read {
   display: flex;
 }
 
-.add-book-form .has-read label {
+.add-book-form .read label {
   font-size: 1rem;
   font-weight: normal;
 }
