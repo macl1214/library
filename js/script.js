@@ -167,7 +167,12 @@ bookForm.addEventListener('keydown', function (e) {
   if (e.key === 'Escape') {
     closeForm();
   }
-})
+});
+
+pagesInput.addEventListener('input', function() {
+  // console.log('pagesInput: input event triggered')
+  pagesInput.setCustomValidity('');
+});
 
 bookFormSubmitBtn.addEventListener('click', submitForm);
 
@@ -185,11 +190,12 @@ function toggleRead(bookCard) {
 
 function closeForm() {
   bookFormCont.classList.remove('show');
+  clearForm();
 }
 
 function submitForm() {
 
-  if (bookForm.reportValidity()) {
+  if (bookForm.reportValidity() && validPages(bookForm)) {
 
     const title = titleInput.value.trim();
     const author = authorInput.value.trim();
@@ -215,6 +221,26 @@ function clearForm() {
   authorInput.value = '';
   pagesInput.value = '';
   readFlag.checked = true;
+}
+
+function validPages(bookForm) {
+  const pagesInput = bookForm.querySelector('#pages');
+  
+  console.log(pagesInput.value);
+
+  const pages = Number.parseInt(pagesInput.value);
+  console.log(Number.isNaN(pages));
+  
+  if (Number.isNaN(pages)) {
+    pagesInput.setCustomValidity('Enter in a valid number');
+    return bookForm.reportValidity();
+  }
+  else if (pages < 1 || pages > 5000) {
+    pagesInput.setCustomValidity('There should be at least 1 page and no more than 5000');
+    return bookForm.reportValidity();
+  }
+
+  return true;
 }
 
 function bookExists(title, author) {
