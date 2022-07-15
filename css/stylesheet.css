@@ -71,6 +71,10 @@ table {
   --book-form-bg: #fdfcf7;
 }
 
+body {
+  background-color: var(--content-bg);
+}
+
 .header {
   width: 100%;
   height: var(--header-height);
@@ -121,20 +125,21 @@ table {
 .content {
   margin-top: 5rem;
   padding: 80px 50px;
-  height: var(--content-height);
+  /* height: var(--content-height); */
   
-  background-color: var(--content-bg);
+  
+  /* background-color: var(--content-bg); */
 
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(calc(var(--card-width) + 40px), 1fr));
   gap: 20px;
-  justify-content: center;
+  justify-items: center;
 
   /* position: relative; */
 }
 
 .content .book-card {
-  width: var(--card-width);
+  width: clamp(var(--card-width), 50%, calc(var(--card-width) + 50px));
   height: var(--card-height);
 
   padding: 8px 16px;
@@ -255,7 +260,8 @@ table {
   background-color: var(--book-form-bg);
 
   display: grid;
-  grid-template-rows: 20px 1fr 1fr 1fr 1fr 1fr;
+  grid-template-rows: 20px repeat(4, 1fr) 40px 1fr;
+  align-items: center;
 }
 
 .add-book-form .close-btn {
@@ -300,10 +306,45 @@ table {
   font-family: var(--book-title-font);
   font-weight: 700;
   font-size: 1.2rem;
+
+  user-select: none;
 }
 
 .add-book-form input[type=text] {
   border: 1px solid black;
   border-radius: 5px;
   padding: 5px 10px;
+}
+
+.add-book-form input[type=text]:hover {
+  filter: brightness(95%);
+}
+
+.add-book-form .has-read {
+  display: flex;
+}
+
+.add-book-form .has-read label {
+  font-size: 1rem;
+  font-weight: normal;
+}
+
+.add-book-form .form-submit {
+  justify-self: center;
+  
+  width: 30%;
+  border: none;
+  border-radius: 10px;
+
+  background-color: #193c50;
+  padding: 8px 16px;
+
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #FFFFFF;
+}
+
+.add-book-form .form-submit:hover {
+  filter: brightness(130%);
+  cursor: pointer;
 }
