@@ -1,6 +1,24 @@
-// Library storage
+/** Variables */
+
+// Element variables
+const content = document.querySelector('.content');
+const addBtn = document.querySelector('.add-book-btn');
+const bookFormCont = document.querySelector('.add-book-container');
+const bookForm = document.querySelector(".add-book-form");
+const closeBookForm = document.querySelector('.add-book-form .close-btn');
+const bookFormSubmitBtn = document.querySelector('.form-submit');
+const titleInput = document.querySelector('#title');
+const authorInput = document.querySelector('#author');
+const pagesInput = document.querySelector('#pages');
+const readFlag = document.querySelector('#read');
+const formError = document.querySelector('.form-error');
+
+// Library storage variables
 let myLibrary = [];
 let numOfBooks = 0;
+
+
+/** Library functions */
 
 // Book Object Definition
 function Book(title, author, pages, read = false) {
@@ -117,18 +135,27 @@ function setRead(bookCard, read) {
   }
 }
 
-// Element variables
-const content = document.querySelector('.content');
-const addBtn = document.querySelector('.add-book-btn');
-const bookFormCont = document.querySelector('.add-book-container');
-const bookForm = document.querySelector(".add-book-form");
-const closeBookForm = document.querySelector('.add-book-form .close-btn');
-const bookFormSubmitBtn = document.querySelector('.form-submit');
-const titleInput = document.querySelector('#title');
-const authorInput = document.querySelector('#author');
-const pagesInput = document.querySelector('#pages');
-const readFlag = document.querySelector('#read');
-const formError = document.querySelector('.form-error');
+function bookExists(title, author) {
+  const t1 = title.toLowerCase();
+  const a1 = author.toLowerCase();
+
+  for (let book of myLibrary) {
+    if (book.title.toLowerCase() === t1 && book.author.toLowerCase() === a1) {
+      return true;
+    }
+  }
+
+  return false;
+}
+
+function getBookById(id) {
+  for (let book of myLibrary) {
+    if (book.id === id) {
+      return book;
+    }
+  } 
+}
+
 
 /** Event listeners */
 
@@ -160,6 +187,7 @@ bookForm.addEventListener('click', function (e) {
   e.stopPropagation();
 });
 
+// Enter key and escape key functionality
 bookForm.addEventListener('keydown', function (e) {
   if (e.key === 'Enter') {
     submitForm();
@@ -169,14 +197,14 @@ bookForm.addEventListener('keydown', function (e) {
   }
 });
 
+// Clear custom validation to remove popup message
 pagesInput.addEventListener('input', function() {
   // console.log('pagesInput: input event triggered')
   pagesInput.setCustomValidity('');
 });
 
+// Link button to submit form
 bookFormSubmitBtn.addEventListener('click', submitForm);
-
-window.onload(initLibrary());
 
 function toggleRead(bookCard) {
   const idDiv = bookCard.querySelector('.book-id');
@@ -243,23 +271,4 @@ function validPages(bookForm) {
   return true;
 }
 
-function bookExists(title, author) {
-  const t1 = title.toLowerCase();
-  const a1 = author.toLowerCase();
-
-  for (let book of myLibrary) {
-    if (book.title.toLowerCase() === t1 && book.author.toLowerCase() === a1) {
-      return true;
-    }
-  }
-
-  return false;
-}
-
-function getBookById(id) {
-  for (let book of myLibrary) {
-    if (book.id === id) {
-      return book;
-    }
-  } 
-}
+window.onload(initLibrary());
