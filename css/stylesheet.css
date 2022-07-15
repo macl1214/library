@@ -197,17 +197,19 @@ body {
 
   font-family: 'Open sans', 'sans-serif', Verdana;
   background-color: var(--has-read-btn);
+  font-weight: 700;
   
   border: none;
   border-radius: 5px;
 }
 
-.not-read {
+.read-btn.not-read {
   background-color: var(--has-read-btn);
 }
 
-.has-read {
+.read-btn.has-read {
   background-color: var(--not-read-btn);
+  color: white;
 }
 
 .book-card .read-btn:hover {

@@ -3,11 +3,11 @@ let myLibrary = [];
 let numOfBooks = 0;
 
 // Book Object Definition
-function Book(title, author, pages, read=false) {
+function Book(title, author, pages, read = false) {
   this.title = title;
   this.author = author;
   this.pages = pages;
-  
+
   this.id = numOfBooks++;
   this.read = read;
 }
@@ -17,7 +17,7 @@ function initLibrary() {
   addBookToLibrary(new Book('Animal Farm', 'George Orwell', 112));
   addBookToLibrary(new Book('Lord of the Flies', 'William Golding', 224));
   addBookToLibrary(new Book('The Metamorphosis', 'Franz Kafka', 74));
-  
+
   // displayBooks();
 }
 
@@ -42,6 +42,7 @@ function displayBookInGrid(book) {
   setAuthor(bookCard, book.author);
   setPages(bookCard, book.pages);
   setId(bookCard, book.id);
+  setRead(bookCard, book.read);
 
   content.appendChild(bookCard);
 }
@@ -92,7 +93,7 @@ function setAuthor(bookCard, author) {
 
 function setPages(bookCard, pages) {
   const pagesDiv = bookCard.querySelector('.pages');
-  
+
   pagesDiv.innerText = pages;
 }
 
@@ -100,6 +101,20 @@ function setId(bookCard, id) {
   const bookIdDiv = bookCard.querySelector('.book-id');
 
   bookIdDiv.setAttribute('data-id', id);
+}
+
+function setRead(bookCard, read) {
+  const bookReadBtn = bookCard.querySelector('.read-btn');
+
+  if (read) {
+    bookReadBtn.classList.remove('not-read');
+    bookReadBtn.classList.add('has-read');
+    bookReadBtn.innerText = 'Not read';
+  } else {
+    bookReadBtn.classList.remove('has-read');
+    bookReadBtn.classList.add('not-read');
+    bookReadBtn.innerText = 'Read';
+  }
 }
 
 // Element variables
@@ -117,8 +132,22 @@ const formError = document.querySelector('.form-error');
 
 /** Event listeners */
 
+// Read button
+document.addEventListener('click', function(e) {
+  const readBtn = e.target;
+
+  // Check if read button was clicked
+  if(readBtn.classList.contains('read-btn')) {
+    
+    const book = readBtn.parentElement;
+    // console.log(book);
+
+    toggleRead(book);
+  }
+});
+
 // Add Book Form
-addBtn.addEventListener('click', function() {
+addBtn.addEventListener('click', function () {
   bookFormCont.classList.add('show');
 });
 
@@ -127,11 +156,11 @@ closeBookForm.addEventListener('click', closeForm);
 
 bookFormCont.addEventListener('click', closeForm);
 
-bookForm.addEventListener('click', function(e) {
+bookForm.addEventListener('click', function (e) {
   e.stopPropagation();
 });
 
-bookForm.addEventListener('keydown', function(e) {
+bookForm.addEventListener('keydown', function (e) {
   if (e.key === 'Enter') {
     submitForm();
   }
@@ -144,27 +173,37 @@ bookFormSubmitBtn.addEventListener('click', submitForm);
 
 window.onload(initLibrary());
 
+function toggleRead(bookCard) {
+  const idDiv = bookCard.querySelector('.book-id');
+  const bookId = Number.parseInt(idDiv.getAttribute('data-id'));
+  
+  const book = getBookById(bookId);
+  book.read = !book.read;
+
+  setRead(bookCard, book.read);
+}
+
 function closeForm() {
   bookFormCont.classList.remove('show');
 }
 
 function submitForm() {
-  
+
   if (bookForm.reportValidity()) {
-    
+
     const title = titleInput.value.trim();
     const author = authorInput.value.trim();
-    
+
     if (bookExists(title, author)) {
       formError.innerText = '* This book is already in your library!'
-      
+
     } else {
       const pages = pagesInput.value;
       const hasRead = readFlag.checked;
-      
+
       const newBook = new Book(title, author, pages, hasRead);
       addBookToLibrary(newBook);
-      
+
       closeForm();
       clearForm();
     }
@@ -175,7 +214,7 @@ function clearForm() {
   titleInput.value = '';
   authorInput.value = '';
   pagesInput.value = '';
-  readFlag.checked= true;
+  readFlag.checked = true;
 }
 
 function bookExists(title, author) {
@@ -189,4 +228,12 @@ function bookExists(title, author) {
   }
 
   return false;
+}
+
+function getBookById(id) {
+  for (let book of myLibrary) {
+    if (book.id === id) {
+      return book;
+    }
+  } 
 }
