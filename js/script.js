@@ -109,6 +109,7 @@ const closeBookForm = document.querySelector('.add-book-form .close-btn');
 const bookFormSubmitBtn = document.querySelector('.form-submit');
 const titleInput = document.querySelector('#title');
 const authorInput = document.querySelector('#author');
+const formError = document.querySelector('.form-error');
 
 
 /** Event listeners */
@@ -149,8 +150,8 @@ function submitForm() {
     const author = authorInput.value.trim();
     
     if (bookExists(title, author)) {
-      titleInput.setCustomValidity('This book is already in your library!');
-      bookForm.reportValidity();
+      formError.innerText = '* This book is already in your library!'
+      
     } else {
       
       console.log(`${title} is a valid entry`);
@@ -160,8 +161,11 @@ function submitForm() {
 }
 
 function bookExists(title, author) {
+  const t1 = title.toLowerCase();
+  const a1 = author.toLowerCase();
+
   for (let book of myLibrary) {
-    if (book.title.toLowerCase() === title.toLowerCase()) {
+    if (book.title.toLowerCase() === t1 && book.author.toLowerCase() === a1) {
       return true;
     }
   }

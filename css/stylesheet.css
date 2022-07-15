@@ -287,11 +287,33 @@ body {
 }
 
 .add-book-form .book-form-header {
+  width: 100%;
+  height: 100%;
   justify-self: center;
 
-  font-size: 1.8em;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  position: relative;
+}
+
+.add-book-form .book-form-header .form-title {
+  font-size: 2rem;
   font-weight: 700;
   font-family: var(--logo-font);
+}
+
+.add-book-form .book-form-header .form-error {
+  position: absolute;
+  bottom: -10px;
+  
+  /* display: none; */
+  font-size: 1rem;
+  color: red;
+
+  user-select: none;
 }
 
 .add-book-form .form-input {
