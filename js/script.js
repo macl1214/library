@@ -17,8 +17,8 @@ const formError = document.querySelector('.form-error');
 let myLibrary = [];
 let numOfBooks = 0;
 
-/** Book class definition */
 
+/** Class definitions */
 // Book class
 class Book {
   #title;
@@ -80,7 +80,7 @@ class Book {
   }
 
   set read(read) {
-    this.read = !this.read;
+    this.read = read;
   }
 }
 
@@ -119,7 +119,225 @@ class Library {
       return this.#myLibrary[id];
     }
   }
+
+  containsBook(title, author) {
+    const fTitle = title.toLowerCase();
+    const fAuthor = author.toLowerCase();
+
+    for (let book of this.#myLibrary) {
+      const curTitle = book.title.toLowerCase();
+      const curAuthor = book.author.toLowerCase();
+
+      if (fTitle === curTitle && fAuthor === curAuthor) return true;
+    }
+
+    return false;
+  }
 }
+
+/** Module definitions */
+const libraryDisplayController = (() => {
+  const _myLibrary = new Library();
+
+  // Element variables
+  const _content = document.querySelector('.content');
+  const _addBtn = document.querySelector('.add-book-btn');
+  const _bookFormCont = document.querySelector('.add-book-container');
+  const _bookForm = document.querySelector(".add-book-form");
+  const _closeBookForm = document.querySelector('.add-book-form .close-btn');
+  const _bookFormSubmitBtn = document.querySelector('.form-submit');
+  const _titleInput = document.querySelector('#title');
+  const _authorInput = document.querySelector('#author');
+  const _pagesInput = document.querySelector('#pages');
+  const _readFlag = document.querySelector('#read');
+  const _formError = document.querySelector('.form-error');
+
+  const displayBooks = () => {
+    for (let book of myLibrary.library) {
+      _displayBookInGrid(book);
+    }
+  };
+
+  const _displayBookInGrid = (book) => {
+    const bookCard = createEmptyBookCont();
+
+    _setTitle(bookCard, book.title);
+    _setAuthor(bookCard, book.author);
+    _setPages(bookCard, book.pages);
+    _setId(bookCard, book.id);
+    _setRead(bookCard, book.read);
+    _content.appendChild(bookCard);
+  };
+
+  const _createEmptyBookCont = () => {
+    const bookCard = document.createElement('div');
+    const titleBlock = document.createElement('div');
+    const title = document.createElement('span');
+    const authorBlock = document.createElement('div');
+    const author = document.createElement('span');
+    const pages = document.createElement('div');
+    const bookId = document.createElement('div');
+    const readBtn = document.createElement('button');
+  
+    bookCard.classList.add('book-card');
+    titleBlock.classList.add('title-block');
+    title.classList.add('title');
+    authorBlock.classList.add('author-block');
+    author.classList.add('author');
+    pages.classList.add('pages');
+    bookId.classList.add('book-id');
+    bookId.setAttribute('hidden', '');
+    readBtn.classList.add('read-btn');
+  
+    titleBlock.appendChild(title);
+    authorBlock.appendChild(author);
+  
+    bookCard.appendChild(titleBlock);
+    bookCard.appendChild(authorBlock);
+    bookCard.appendChild(pages);
+    bookCard.appendChild(bookId);
+    bookCard.appendChild(readBtn);
+  
+    return bookCard;
+  };
+
+  const _setTitle = (bookCard, title) => {
+    const titleSpan = bookCard.querySelector('.title');
+  
+    titleSpan.innerText = title;
+  };
+  
+  const _setAuthor = (bookCard, author) => {
+    const authorSpan = bookCard.querySelector('.author');
+  
+    authorSpan.innerText = author;
+  };
+  
+  const _setPages = (bookCard, pages) => {
+    const pagesDiv = bookCard.querySelector('.pages');
+  
+    pagesDiv.innerText = pages;
+  };
+  
+  const _setId = (bookCard, id) => {
+    const bookIdDiv = bookCard.querySelector('.book-id');
+  
+    bookIdDiv.setAttribute('data-id', id);
+  };
+  
+  const _setRead = (bookCard, read) => {
+    const bookReadBtn = bookCard.querySelector('.read-btn');
+  
+    if (read) {
+      bookReadBtn.classList.remove('not-read');
+      bookReadBtn.classList.add('has-read');
+      bookReadBtn.innerText = 'Not read';
+    } else {
+      bookReadBtn.classList.remove('has-read');
+      bookReadBtn.classList.add('not-read');
+      bookReadBtn.innerText = 'Read';
+    }
+  };
+
+  /** Event Listener helper functions */
+  const _toggleRead = (e) => {
+    const target = e.target;
+    
+    if(target.classList.contains('read-btn')) {
+      const bookCard = readBtn.parentElement;
+
+      const idDiv = bookCard.querySelector('.book-id');
+      const bookId = Number.parseInt(idDiv.getAttribute('data-id'));
+      
+      const book = _myLibrary.getBookById(bookId);
+      book.read = !book.read;
+    
+      _setRead(bookCard, book.read);
+    }
+  }
+
+  const _clearForm = () => {
+    _titleInput.value = '';
+    _authorInput.value = '';
+    _pagesInput.value = '';
+    _readFlag.value = true;
+  }
+
+  const _closeForm = () => {
+    _bookForm.classList.remove('show');
+    _clearForm();
+  }
+
+  const _keyboardInput = (e) => {
+    if (e.key === 'Enter') {
+      submitForm();
+    }
+    if (e.key === 'Escape') {
+      closeForm();
+    }
+  };
+
+  const _validPages = (bookForm) => {
+    const pagesInput = bookForm.querySelector('#pages');
+    
+    console.log(pagesInput.value);
+  
+    const pages = Number.parseInt(pagesInput.value);
+    // console.log(Number.isNaN(pages));
+    
+    if (Number.isNaN(pages)) {
+      pagesInput.setCustomValidity('Enter in a valid number');
+      return bookForm.reportValidity();
+    }
+    else if (pages < 1 || pages > 5000) {
+      pagesInput.setCustomValidity('There should be at least 1 page and no more than 5000');
+      return bookForm.reportValidity();
+    }
+  
+    return true;
+  };
+
+  const _submitForm = () => {
+    if (_bookForm.reportValidity() && _validPages(bookForm)) {
+
+      const title = _titleInput.value.trim();
+      const author = _authorInput.value.trim();
+  
+      if (_myLibrary.bookExists(title, author)) {
+        formError.innerText = '* This book is already in your library!'
+  
+      } else {
+        const pages = _pagesInput.value;
+        const hasRead = _readFlag.checked;
+  
+        const newBook = new Book(title, author, pages, hasRead);
+        _myLibrary.addBookToLibrary(newBook);
+  
+        _closeForm();
+        _clearForm();
+      }
+    }
+  };
+
+  window.onload = () => {
+    /** Event Listener  */
+
+    // Read Button
+    _content.addEventListener('click', _toggleRead);
+    // Show book form
+    _addBtn.addEventListener('click', () => _bookFormCont.classList.add('show'));
+    // Close book Form
+    _closeBookForm.addEventListener('click', _closeForm);
+    _bookFormCont.addEventListener('click', _closeForm);
+    _bookForm.addEventListener('click', (e) => e.stopPropagation());
+    // Enter and escape key functionality
+    _bookForm.addEventListener('keydown', _keyboardInput);
+    // Clear custom validation to remove popup message
+    _pagesInput.addEventListener('input', () => _pagesInput.setCustomValidity(''));
+    // Submit form button
+    _bookFormSubmitBtn.addEventListener('click', _submitForm);
+  }
+})();
 
 /** Library functions */
 
