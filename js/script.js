@@ -17,6 +17,73 @@ const formError = document.querySelector('.form-error');
 let myLibrary = [];
 let numOfBooks = 0;
 
+/** Book class definition */
+/** Library Class */
+
+// Book class
+class Book {
+  #title;
+  #author;
+  #pages;
+  #id;
+  #read;
+
+  constructor(title, author, pages, id, read = false) {
+    this.#title = title;
+    this.#author = author;
+    this.#pages = pages;
+    this.#read = read;
+    this.#id = id;
+  }
+
+  get title() {
+    return this.#title;
+  }
+
+  set title(title) {
+    if (this.#title === undefined) {
+      this.#title = title;
+    }
+  }
+
+  get author() {
+    return this.#author;
+  }
+
+  set author(author) {
+    if (this.#author === undefined) {
+      this.#author = author;
+    }
+  }
+
+  get pages() {
+    return this.#pages;
+  }
+
+  set pages(pages) {
+    if (this.#pages === undefined && Number.isInteger(pages)) {
+      this.#pages = pages;
+    }
+  }
+
+  get id() {
+    return this.#id;
+  }
+
+  set id(id) {
+    if (Number.isInteger(id)) {
+      this.#id = id;
+    }
+  }
+
+  get read() {
+    return this.#read;
+  }
+
+  set read(read) {
+    this.read = !this.read;
+  }
+}
 
 /** Library functions */
 
