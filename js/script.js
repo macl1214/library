@@ -272,3 +272,7 @@ function validPages(bookForm) {
 }
 
 window.onload(initLibrary());
+
+
+/** TO DO LIST */
+// Delete button on book cards
