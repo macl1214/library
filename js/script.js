@@ -18,7 +18,6 @@ let myLibrary = [];
 let numOfBooks = 0;
 
 /** Book class definition */
-/** Library Class */
 
 // Book class
 class Book {
@@ -82,6 +81,43 @@ class Book {
 
   set read(read) {
     this.read = !this.read;
+  }
+}
+
+// Library class
+class Library {
+  #myLibrary;
+  #numOfBooks;
+
+  constructor () {
+    this.#myLibrary = [];
+    this.#numOfBooks = 0;
+
+    this.#addSampleBooks();
+  }
+
+  #addSampleBooks() {
+    this.addBook(new Book('Animal Farm', 'George Orwell', 112, this.numOfBooks++));
+    this.addBook(new Book('Lord of the Flies', 'William Golding', 224, this.numOfBooks++));
+    this.addBook(new Book('The Metamorphosis', 'Franz Kafka', 74, this.numOfBooks++));
+  }
+
+  addBook(book) {
+    if (book !== null) {
+      book.id = numOfBooks++;
+      
+      this.#myLibrary.push(book);
+
+      return book;
+    } else {
+      throw new Error("Can't add a book that has not been initialized");
+    }
+  }
+
+  getBookById(id) {
+    if (id >= 0 && id < this.#numOfBooks) {
+      return this.#myLibrary[id];
+    }
   }
 }
 
