@@ -66,11 +66,13 @@ table {
   --logo-color: #edede9;
   --header-btn: #fbfaf8;
   --content-bg: #efede6;
+
   --book-card-bg: #ccd2bb;
   --has-read-btn-bg: #f4f2e1;
-  --not-read-btn-bg: #e63946;
+  --not-read-btn-bg: #c88f86;
   --remove-btn-bg: #ef233c;
   --remove-btn-font-color: #ffffff;
+  
   --book-form-bg: #fdfcf7;
 }
 
