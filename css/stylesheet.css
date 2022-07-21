@@ -67,8 +67,10 @@ table {
   --header-btn: #fbfaf8;
   --content-bg: #efede6;
   --book-card-bg: #ccd2bb;
-  --has-read-btn: #f4f2e1;
-  --not-read-btn: #e63946;
+  --has-read-btn-bg: #f4f2e1;
+  --not-read-btn-bg: #e63946;
+  --remove-btn-bg: #ef233c;
+  --remove-btn-font-color: #ffffff;
   --book-form-bg: #fdfcf7;
 }
 
@@ -190,34 +192,45 @@ body {
   font-size: 1.1rem;
 }
 
-.book-card .read-btn {
-  width: 50%;
-  height: 60%;
-  padding: 5px 10px;
+.book-card .book-options {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+.book-options > * {
+  padding: 5px 10px;  
 
   font-family: 'Open sans', 'sans-serif', Verdana;
-  background-color: var(--has-read-btn);
   font-weight: 700;
-  
+
   border: none;
   border-radius: 5px;
 }
 
+.book-options .read-btn {
+  background-color: var(--has-read-btn-bg);
+}
+
 .read-btn.not-read {
-  background-color: var(--has-read-btn);
+  background-color: var(--has-read-btn-bg);
 }
 
 .read-btn.has-read {
-  background-color: var(--not-read-btn);
+  background-color: var(--not-read-btn-bg);
   color: white;
 }
 
-.book-card .read-btn:hover {
+.book-options > button:hover {
   cursor: pointer;
   
   filter: brightness(95%);
 }
 
+.book-options .remove-btn {
+  background-color: var(--remove-btn-bg);
+  color: var(--remove-btn-font-color);
+}
 .content .add-book-btn {
   position: fixed;
   top: calc(var(--header-height) + 16px);
